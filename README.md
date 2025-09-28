@@ -289,10 +289,8 @@ MIT License - Xem file LICENSE để biết thêm chi tiết.
 
 ## Liên hệ
 
-- Tác giả: [Tên của bạn]
-- Email: [Email của bạn]
+- Tác giả: Bùi Hoàng Nguyên
+- Email: hoanggnguyen231@gmail.com
 - Project: Đồ án môn Hệ Phân tán
 
 ---
-
-**Lưu ý**: Đây là dự án học tập cho môn Hệ Phân tán. Code được thiết kế để minh họa các concepts của distributed systems như communication protocols, synchronization, và real-time updates.

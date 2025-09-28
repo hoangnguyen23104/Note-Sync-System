@@ -1,44 +1,42 @@
 @echo off
-echo Starting Note Sync Server...
+echo ============================
+echo  Starting Note Sync Server
+echo ============================
 
-:: Find and set Java path
-call :find_java
+:: Set JAVA_HOME nếu cần (sửa đường dẫn cho đúng JDK bạn đã cài)
+set "JAVA_HOME=C:\Program Files\Java\jdk-17"
+set "PATH=%JAVA_HOME%\bin;%PATH%"
+
+:: Kiểm tra Java
+java -version >nul 2>&1
 if errorlevel 1 (
-    echo Java not found! Please install Java JDK and run setup.bat
+    echo [ERROR] Java not found! Please install Java JDK.
     pause
     exit /b 1
 )
 
-:: Check if build directory exists
+:: Kiểm tra thư mục build
 if not exist build (
-    echo Build directory not found. Please run setup.bat first.
+    echo [ERROR] Build directory not found!
     pause
     exit /b 1
 )
 
-:: Copy config file to build directory
+:: Copy file config
 copy config.properties build\ >nul 2>&1
 
-:: Change to build directory and run server
+:: Chạy server
 cd build
-java server.NoteSyncServer
+for %%f in (h2*.jar) do set H2_JAR=%%f
 
-pause
-
-:: Function to find Java
-:find_java
-javac -version >nul 2>&1
-if not errorlevel 1 goto :eof
-
-set "JAVA_PATHS=C:\Program Files\Java C:\Program Files (x86)\Java C:\Program Files\Eclipse Adoptium"
-for %%P in (%JAVA_PATHS%) do (
-    if exist "%%P" (
-        for /d %%D in ("%%P\*jdk*") do (
-            if exist "%%D\bin\javac.exe" (
-                set "PATH=%%D\bin;%PATH%"
-                goto :eof
-            )
-        )
-    )
+echo Running: java -cp ".;%H2_JAR%" server.NoteSyncServer
+echo --------------------------------
+java -cp ".;%H2_JAR%" server.NoteSyncServer || (
+    echo [ERROR] Failed to start Note Sync Server.
+    pause
+    exit /b 1
 )
-exit /b 1
+
+echo --------------------------------
+echo [INFO] Note Sync Server stopped.
+pause
